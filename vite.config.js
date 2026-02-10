@@ -9,6 +9,7 @@ export default defineConfig({
     host: true, // Listen on all addresses
     https: true
   },
+  base: '/web-stock-app/',
   plugins: [
     react(),
     basicSsl(),
