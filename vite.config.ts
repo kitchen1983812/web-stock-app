@@ -15,7 +15,8 @@ export default defineConfig({
         short_name: 'ObsidianClip',
         description: 'Web Clipper for Obsidian via Android Share Target',
         theme_color: '#ffffff',
-        start_url: '/web-stock-app/',
+        scope: '/web-stock-app/',
+        start_url: '/web-stock-app/index.html',
         display: 'standalone',
         background_color: '#ffffff',
         icons: [
@@ -27,7 +28,7 @@ export default defineConfig({
           }
         ],
         share_target: {
-          action: '/web-stock-app/',
+          action: '/web-stock-app/index.html',
           method: 'GET',
           params: {
             title: 'title',
@@ -35,6 +36,10 @@ export default defineConfig({
             url: 'url'
           }
         }
+      },
+      workbox: {
+        navigateFallback: '/web-stock-app/index.html',
+        globPatterns: ['**/*.{js,css,html,ico,png,svg}']
       },
       devOptions: {
         enabled: true
