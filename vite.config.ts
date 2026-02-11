@@ -28,7 +28,7 @@ export default defineConfig({
           }
         ],
         share_target: {
-          action: '/web-stock-app/index.html',
+          action: 'https://kitchen1983812.github.io/web-stock-app/',
           method: 'GET',
           params: {
             title: 'title',
