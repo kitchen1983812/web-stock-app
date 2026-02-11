@@ -43,8 +43,12 @@ const ClipperForm: React.FC<ClipperFormProps> = ({ initialUrl, initialTitle, ini
     };
 
     const handleSave = () => {
+        // Sanitize title for filename
+        // Remove illegal chars: * " \ / < > : | ?
+        const safeFilename = title.replace(/[\\/:*?"<>|]/g, '-').trim();
+
         const clipData: ClipData = {
-            title,
+            title, // Frontmatter keeps original title
             url,
             tags: tags.split(',').map(t => t.trim()),
             content,
@@ -53,7 +57,7 @@ const ClipperForm: React.FC<ClipperFormProps> = ({ initialUrl, initialTitle, ini
 
         // Construct Obsidian URI
         // obsidian://new?name=...&content=...
-        const encodedTitle = encodeURIComponent(title);
+        const encodedTitle = encodeURIComponent(safeFilename);
         const encodedContent = encodeURIComponent(markdown);
         const obsidianUri = `obsidian://new?name=${encodedTitle}&content=${encodedContent}`;
 

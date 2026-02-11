@@ -12,9 +12,27 @@ function App() {
     // Web Share Target usually sends params
     if (searchParams.has('title') || searchParams.has('text') || searchParams.has('url')) {
       setParams({
-        title: searchParams.get('title') || '',
-        text: searchParams.get('text') || '',
-        url: searchParams.get('url') || ''
+        let title = searchParams.get('title') || '';
+        let text = searchParams.get('text') || '';
+        let url = searchParams.get('url') || '';
+
+        // Android extraction logic: sometimes URL is in text
+        if(!url && text) {
+        const urlRegex = /(https?:\/\/[^\s]+)/g;
+        const match = text.match(urlRegex);
+        if (match) {
+          url = match[0];
+          // remove url from text if it's just the url
+          if (text.trim() === url) {
+            text = '';
+          }
+        }
+      }
+
+      setParams({
+        title,
+        text,
+        url
       })
     }
   }, [])
