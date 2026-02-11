@@ -56,10 +56,13 @@ const ClipperForm: React.FC<ClipperFormProps> = ({ initialUrl, initialTitle, ini
         const markdown = generateMarkdown(clipData);
 
         // Construct Obsidian URI
-        // obsidian://new?name=...&content=...
-        const encodedTitle = encodeURIComponent(safeFilename);
+        // Use 'file' parameter to specify folder path: Clippings/Filename
+        const filePath = `Clippings/${safeFilename}`;
+        const encodedFilePath = encodeURIComponent(filePath);
         const encodedContent = encodeURIComponent(markdown);
-        const obsidianUri = `obsidian://new?name=${encodedTitle}&content=${encodedContent}`;
+
+        // obsidian://new?file=Path%2FTo%2FFile&content=...
+        const obsidianUri = `obsidian://new?file=${encodedFilePath}&content=${encodedContent}`;
 
         window.location.href = obsidianUri;
     };

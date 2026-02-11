@@ -10,12 +10,19 @@ export interface ExtractedContent {
 
 export const fetchAndParse = async (url: string): Promise<ExtractedContent | null> => {
     try {
-        const response = await fetch(url, {
+        let response = await fetch(url, {
             method: "GET",
             headers: {
                 "User-Agent": "Mozilla/5.0 (compatible; ObsidianClipper/1.0)",
             },
         });
+
+        if (!response.ok) {
+            console.warn('Direct fetch failed, trying CORS proxy...');
+            // Fallback to CORS proxy
+            const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(url)}`;
+            response = await fetch(proxyUrl);
+        }
 
         if (!response.ok) {
             console.warn('Fetch failed:', response.statusText);
