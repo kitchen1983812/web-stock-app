@@ -35,8 +35,9 @@ const ClipperForm: React.FC<ClipperFormProps> = ({ initialUrl, initialTitle, ini
             } else {
                 setFetchError('Could not fetch content automatically (likely CORS). Please paste content manually.');
             }
-        } catch (e) {
-            setFetchError('Error fetching content.');
+        } catch (e: any) {
+            console.error(e);
+            setFetchError(`Error: ${e.message || 'Unknown error'}`);
         } finally {
             setIsLoading(false);
         }
