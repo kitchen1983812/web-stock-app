@@ -25,7 +25,31 @@ export const fetchAndParse = async (url: string): Promise<ExtractedContent | nul
         errorDetails += `Direct: ${e}; `;
     }
 
-    // Strategy 2: AllOrigins (JSONP/CORS friendly)
+    // Strategy 2: Jina AI Reader (Best for content extraction)
+    if (!html) {
+        try {
+            console.log('Trying Jina AI Reader...');
+            // Jina AI returns Markdown directly
+            const response = await fetch(`https://r.jina.ai/${url}`);
+            if (response.ok) {
+                const markdown = await response.text();
+                // Check if it returned an error page
+                if (!markdown.includes('Jina Reader') && markdown.length > 50) {
+                    return {
+                        title: undefined, // Jina might put title in first line, but we can rely on existing title or parse it later if improved
+                        markdown: markdown,
+                        excerpt: undefined,
+                    };
+                }
+            } else {
+                errorDetails += `Jina: ${response.status}; `;
+            }
+        } catch (e) {
+            errorDetails += `Jina: ${e}; `;
+        }
+    }
+
+    // Strategy 3: AllOrigins (JSONP/CORS friendly)
     if (!html) {
         try {
             console.log('Trying AllOrigins...');
