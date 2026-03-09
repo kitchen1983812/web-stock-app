@@ -15,7 +15,7 @@ export const generateMarkdown = (data: ClipData): string => {
     const frontmatter = {
         title: data.title,
         source: data.url,
-        author: data.author ? [[`[[${data.author}]]`]] : undefined, // Format as [[Author]]
+        author: data.author ? [`[[${data.author}]]`] : undefined, // Format as [[Author]]
         published: data.published || format(new Date(), 'yyyy-MM-dd'),
         created: format(new Date(), 'yyyy-MM-dd'),
         description: data.description || '',

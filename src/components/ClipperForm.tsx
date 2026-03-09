@@ -20,8 +20,25 @@ const ClipperForm: React.FC<ClipperFormProps> = ({ initialUrl, initialTitle, ini
 
     useEffect(() => {
         if (initialUrl && !content) {
-            handleFetch(initialUrl);
+            setIsLoading(true);
+            setFetchError(null);
+            fetchAndParse(initialUrl)
+                .then((data) => {
+                    if (data) {
+                        if (data.title) setTitle(data.title);
+                        if (data.markdown) setContent(data.markdown);
+                    } else {
+                        setFetchError('Could not fetch content automatically (likely CORS). Please paste content manually.');
+                    }
+                })
+                .catch((e: unknown) => {
+                    console.error(e);
+                    setFetchError(`Error: ${e instanceof Error ? e.message : 'Unknown error'}`);
+                })
+                .finally(() => setIsLoading(false));
         }
+    // initialUrl が変わった時だけ実行する意図のため content は依存に含めない
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [initialUrl]);
 
     const handleFetch = async (targetUrl: string) => {
@@ -35,9 +52,9 @@ const ClipperForm: React.FC<ClipperFormProps> = ({ initialUrl, initialTitle, ini
             } else {
                 setFetchError('Could not fetch content automatically (likely CORS). Please paste content manually.');
             }
-        } catch (e: any) {
+        } catch (e: unknown) {
             console.error(e);
-            setFetchError(`Error: ${e.message || 'Unknown error'}`);
+            setFetchError(`Error: ${e instanceof Error ? e.message : 'Unknown error'}`);
         } finally {
             setIsLoading(false);
         }

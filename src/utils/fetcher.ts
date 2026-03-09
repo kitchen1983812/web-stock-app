@@ -14,7 +14,7 @@ export const fetchAndParse = async (url: string): Promise<ExtractedContent | nul
 
     // Strategy 1: Direct Fetch
     try {
-        const response = await fetch(url, { headers: { "User-Agent": "ObsidianClipper/1.0" } });
+        const response = await fetch(url);
         if (response.ok) {
             html = await response.text();
             console.log('Fetched via Direct');
@@ -69,7 +69,7 @@ export const fetchAndParse = async (url: string): Promise<ExtractedContent | nul
         }
     }
 
-    // Strategy 3: CorsProxy.io (Backup)
+    // Strategy 4: CorsProxy.io (Backup)
     if (!html) {
         try {
             console.log('Trying CorsProxy.io...');
